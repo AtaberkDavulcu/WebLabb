@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haber Derleyici</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        #output {
+            margin-top: 20px;
+        }
+        .article {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Haberler</h1>
+    <button onclick='getNews()'>Haberleri Getir</button>
+    <div id="output"></div>
+
+    <script>
+        const apiKey = '34e36c5b268c4ab6bb878872066b0bd7';
+
+        function getNews() {
+            fetch(`https://newsapi.org/v2/everything?q=apple&from=2024-10-13&to=2024-10-13&sortBy=popularity&apiKey=${'34e36c5b268c4ab6bb878872066b0bd7'}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ağ hatası: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const outputDiv = document.getElementById("output");
+                    outputDiv.innerHTML = '';
+                    data.articles.forEach(article => {
+                        outputDiv.innerHTML += `
+                            <div class="article">
+                                <img src="${article.urlToImage}" alt=" Haber Resmi ">
+                                <h2>${article.title}</h2>
+                                <strong>${article.source.name}</strong><br>
+                                <p>${article.description}</p>
+                                <a href="${article.url}" target="_blank"> Devamını Oku </a>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Hata:', error));
+        }
+    </script>
+</body>
+</html>
